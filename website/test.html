@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>HTTP RENDER Method Test</title>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+  <script>
+    $(function(){
+      var show = function(data){
+        frames['out'].document.write(data);
+        frames['out'].document.close();
+      };
+      $('#foo').click(function(){
+        $.ajax('/about?'+(new Date().getTime()),{
+          type:'RENDER',
+          contentType:"application/json; charset=utf-8",
+          dataType:"html",
+          success:show,
+          data:JSON.stringify([
+            {content:"## This is a test\n\nOf the emergency markdown system"},
+            {format:'textile',content:'h3. And of textile\n\n'}
+          ])
+        })
+      });
+      $('#bar').click(function(){
+        $.ajax('/about?'+(new Date().getTime()),{
+          type:'PREVIEW',
+          contentType:"application/json; charset=utf-8",
+          dataType:"html",
+          success:show,
+          data:JSON.stringify({
+            page:{title:"Hot Pockets!"},
+            contents:{
+              content:[{content:"## This is a dynamic header ##\n\nAnd a paragraph beneath",format:null}],
+              footer:[{content:"This is a replacement footer",format:null}]
+            }
+          })
+        })
+      });
+    })
+  </script>
+</head>
+<body>
+<button id="foo">Render Some Markdown &amp; Textile</button>
+<button id="bar">Preview About Page</button><br>
+<iframe id="bar-out" name="out" style="width:900px; height:600px" src="about:blank"></iframe>
+</body>
+</html>

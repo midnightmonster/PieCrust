@@ -39,7 +39,11 @@
         </div>
         <div id="footer" class="span-24 last">
 			{% block footer %}
-            <p>{{ piecrust.branding|raw }}</p>
+                {% if footer %}
+                    {{ footer|raw }}
+                {% else %}
+                    <p>{{ piecrust.branding|raw }}</p>
+                {% endif %}
 			{% endblock %}
         </div>
     </div>
