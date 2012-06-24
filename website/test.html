@@ -19,7 +19,7 @@
             {content:"## This is a test\n\nOf the emergency markdown system"},
             {format:'textile',content:'h3. And of textile\n\n'}
           ])
-        })
+        });
       });
       $('#bar').click(function(){
         $.ajax('/about?'+(new Date().getTime()),{
@@ -34,14 +34,29 @@
               footer:[{content:"This is a replacement footer",format:null}]
             }
           })
-        })
+        });
       });
       $('#baz').click(function(){
         $.ajax('/about?'+(new Date().getTime()),{
           type:'PAGEDATA',
           dataType:"text",
           success:function(data){ show("<pre>"+data+"</pre>"); }
-        })
+        });
+      });
+      $('#put').click(function(){
+        $.ajax('/about?'+(new Date().getTime()),{
+          type:'PAGEDATA',
+          dataType:"json",
+          success:function(data){
+            $.ajax('/about?p'+(new Date().getTime()),{
+              type:'PUT',
+              contentType:"application/json; charset=utf-8",
+              dataType:"text",
+              success:function(data){ show("<pre>"+data+"</pre>"); },
+              data:JSON.stringify(data)
+            });
+          }
+        });
       });
     })
   </script>
@@ -49,7 +64,8 @@
 <body>
 <button id="foo">Render</button>
 <button id="bar">Preview</button>
-<button id="baz">Page Data</button><br>
+<button id="baz">Page Data</button>
+<button id="put">Put</button><br>
 <iframe id="bar-out" name="out" style="width:900px; height:600px" src="about:blank"></iframe>
 </body>
 </html>

@@ -14,7 +14,8 @@ RewriteRule ^.*$ - [NC,L]
 # Zoe HTTP Methods
 RewriteCond %{REQUEST_METHOD} =RENDER [OR]
 RewriteCond %{REQUEST_METHOD} =PREVIEW [OR]
-RewriteCond %{REQUEST_METHOD} =PAGEDATA
+RewriteCond %{REQUEST_METHOD} =PAGEDATA [OR]
+RewriteCond %{REQUEST_METHOD} =PUT
 RewriteRule ^.*$ zoe_http.php [NC,L]
 
 # Rewrite all the rest through the gateway.

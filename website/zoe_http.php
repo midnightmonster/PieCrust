@@ -18,4 +18,8 @@ switch($_SERVER['REQUEST_METHOD']){
     $runner = new PieCrust\Zoe\PieCrustRunner($pieCrust);
     $runner->run(null);
     break;
+  case 'PUT':
+    $writer = new PieCrust\Zoe\PageWriter($pieCrust);
+    $writer->write();
+    break;
 }
