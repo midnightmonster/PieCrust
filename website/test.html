@@ -29,19 +29,27 @@
           success:show,
           data:JSON.stringify({
             page:{title:"Hot Pockets!"},
-            contents:{
+            segments:{
               content:[{content:"## This is a dynamic header ##\n\nAnd a paragraph beneath",format:null}],
               footer:[{content:"This is a replacement footer",format:null}]
             }
           })
         })
       });
+      $('#baz').click(function(){
+        $.ajax('/about?'+(new Date().getTime()),{
+          type:'PAGEDATA',
+          dataType:"text",
+          success:function(data){ show("<pre>"+data+"</pre>"); }
+        })
+      });
     })
   </script>
 </head>
 <body>
-<button id="foo">Render Some Markdown &amp; Textile</button>
-<button id="bar">Preview About Page</button><br>
+<button id="foo">Render</button>
+<button id="bar">Preview</button>
+<button id="baz">Page Data</button><br>
 <iframe id="bar-out" name="out" style="width:900px; height:600px" src="about:blank"></iframe>
 </body>
 </html>

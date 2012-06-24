@@ -19,7 +19,7 @@ class PreviewPage extends \PieCrust\Page\Page implements IPage {
     if($this->config == null) {
       $this->config = new PageConfiguration($this, array(), false);
       $this->config->set(empty($this->previewData['page']) ? array() : $this->previewData['page']);
-      $this->contents = empty($this->previewData['contents']) ? array() : $this->previewData['contents'];
+      $this->contents = empty($this->previewData['segments']) ? array() : $this->previewData['segments'];
       foreach ($this->contents as $key => $segment) {
         $this->config->appendValue('segments',$key);
       }

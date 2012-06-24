@@ -3,12 +3,26 @@
 namespace PieCrust\Zoe;
 
 use PieCrust\Zoe\PreviewPage as Page;
-use PieCrust\Page\PageRenderer;
 use PieCrust\Util\HttpHeaderHelper;
 use PieCrust\Util\ServerHelper;
 
 class PieCrustRunner extends \PieCrust\Runner\PieCrustRunner {
+  protected $pageClass;
+  protected $rendererClass;
+
   public function runUnsafe($uri = null, array $server = null, $extraPageData = null, array &$headers = null) {
+    $this->pageClass = 'PieCrust\Zoe\PreviewPage';
+    $this->rendererClass = 'PieCrust\Page\PageRenderer';
+    return $this->runUnsafeWithClasses($uri,$server,$extraPageData,$headers);
+  }
+  public function runPageData($uri = null, array $server = null, $extraPageData = null, array &$headers = null) {
+    $this->pageClass = 'PieCrust\Page\Page';
+    $this->rendererClass = 'PieCrust\Zoe\PageDataRenderer';
+    return $this->runUnsafeWithClasses($uri,$server,$extraPageData,$headers);
+  }
+  public function runUnsafeWithClasses($uri = null, array $server = null, $extraPageData = null, array &$headers = null) {
+    $pageClass = $this->pageClass;
+    $rendererClass = $this->rendererClass;
     // Remember the time.
     $this->lastRunInfo = array('start_time' => microtime(true));
     
@@ -23,13 +37,13 @@ class PieCrustRunner extends \PieCrust\Runner\PieCrustRunner {
     if ($uri == null) $uri = ServerHelper::getRequestUri($server, $this->pieCrust->getConfig()->getValueUnchecked('site/pretty_urls'));
 
     // Do the heavy lifting.
-    $page = Page::createFromUri($this->pieCrust, $uri, false);
+    $page = $pageClass::createFromUri($this->pieCrust, $uri, false);
     if ($extraPageData != null) $page->setExtraPageData($extraPageData);
-    $pageRenderer = new PageRenderer($page, $this->lastRunInfo);
+    $pageRenderer = new $rendererClass($page, $this->lastRunInfo);
     $output = $pageRenderer->get();
     
     // Set or return the HTML headers.
-    HttpHeaderHelper::setOrAddHeaders(PageRenderer::getHeaders($page->getConfig()->getValue('content_type'), $server), $headers);
+    HttpHeaderHelper::setOrAddHeaders($rendererClass::getHeaders($page->getConfig()->getValue('content_type'), $server), $headers);
     
     // No caching!
     HttpHeaderHelper::setOrAddHeader('Cache-Control', 'no-cache, must-revalidate', $headers);
