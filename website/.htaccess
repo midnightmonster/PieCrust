@@ -11,17 +11,11 @@ RewriteCond %{REQUEST_FILENAME} -l [OR]
 RewriteCond %{REQUEST_FILENAME} -d
 RewriteRule ^.*$ - [NC,L]
 
-# HTTP RENDER
-RewriteCond %{REQUEST_METHOD} =RENDER
-RewriteRule ^.*$ render.php [NC,L]
-
-# HTTP PREVIEW
-RewriteCond %{REQUEST_METHOD} =PREVIEW
-RewriteRule ^.*$ preview.php [NC,L]
-
-# HTTP PAGEDATA
+# Zoe HTTP Methods
+RewriteCond %{REQUEST_METHOD} =RENDER [OR]
+RewriteCond %{REQUEST_METHOD} =PREVIEW [OR]
 RewriteCond %{REQUEST_METHOD} =PAGEDATA
-RewriteRule ^.*$ pagedata.php [NC,L]
+RewriteRule ^.*$ zoe_http.php [NC,L]
 
 # Rewrite all the rest through the gateway.
 RewriteRule ^.*$ index.php [NC,L]
